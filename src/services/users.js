@@ -1,5 +1,5 @@
 import request from '../utils/request';
 
 export function query({page=1}) {
-  return request(`/api/users/_page=${page}&_limit=5`);
+  return request(`/users?_page=${page}&_limit=5`);
 }

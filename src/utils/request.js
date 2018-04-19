@@ -14,7 +14,7 @@ function checkStatus(response) {
 }
 
 export default async function request(url, options) {
-  const response = await fetch(url,options);
+  const response = await fetch('http://jsonplaceholder.typicode.com'+url,options);
   checkStatus(response);
   const data = await response.json();
   const ret = {
