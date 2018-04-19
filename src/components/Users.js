@@ -2,10 +2,20 @@ import {connect} from 'dva';
 import {Table,Pagination,Popconfirm} from 'antd';
 import styles from './Users.css';
 import {PAGE_SIZE} from '../constants';
-console.log(styles);
-function Users({list:dataSource,total,page:current}){
+import {routerRedux} from 'dva/router';
+function Users({dispatch,list:dataSource,total,page:current}){
   function handleDelete(id){
-   console.warn(`TODO: ${id}`);
+    dispatch({
+      type: 'users/remove',
+      payload: id,
+    });
+  }
+
+  function handlePageChange(page){
+    dispatch(routerRedux.push({
+      path:'/users',
+      query:{page}
+    }));
   }
 
   const columns = [
@@ -28,16 +38,17 @@ function Users({list:dataSource,total,page:current}){
       {
         title:'Operation',
         key:'operation',
-        render:(text,{id})=>{
+        render:(text,{id})=>(
             <span className={styles.operation}>
                 <a href="">编辑</a>
                 <Popconfirm title="确定删除吗?" onConfirm={()=>handleDelete(id)}>
                     <a href="">删除</a>
                 </Popconfirm>
             </span>
-        }
+        )
       }
   ]
+
   return (
       <div className={styles.normal}>
         <div>
@@ -52,6 +63,7 @@ function Users({list:dataSource,total,page:current}){
               total={total}
               current={current}
               pageSize={PAGE_SIZE}
+              onChange={handlePageChange}
             />
         </div>
       </div>
