@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "antd": "^3.4.1",
+    "cors": "^2.8.4",
     "dva": "^2.2.3",
+    "dva-loading": "^2.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },

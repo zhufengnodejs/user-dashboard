@@ -3,7 +3,7 @@ import {Table,Pagination,Popconfirm} from 'antd';
 import styles from './Users.css';
 import {PAGE_SIZE} from '../constants';
 import {routerRedux} from 'dva/router';
-function Users({dispatch,list:dataSource,total,page:current}){
+function Users({dispatch,list:dataSource,loading,total,page:current}){
   function handleDelete(id){
     dispatch({
       type: 'users/remove',
@@ -11,10 +11,10 @@ function Users({dispatch,list:dataSource,total,page:current}){
     });
   }
 
-  function handlePageChange(page){
+  function handlePageChange(page) {
     dispatch(routerRedux.push({
-      path:'/users',
-      query:{page}
+      pathname:'/users',
+      search:`?page=${page}`
     }));
   }
 
@@ -48,11 +48,11 @@ function Users({dispatch,list:dataSource,total,page:current}){
         )
       }
   ]
-
   return (
       <div className={styles.normal}>
         <div>
-            <Table
+           <Table
+              loading={loading}
               columns={columns}
               dataSource={dataSource}
               rowKey={record=>record.id}
@@ -62,7 +62,7 @@ function Users({dispatch,list:dataSource,total,page:current}){
               className="ant-table-pagination"
               total={total}
               current={current}
-              pageSize={PAGE_SIZE}
+               pageSize={PAGE_SIZE}
               onChange={handlePageChange}
             />
         </div>
@@ -75,7 +75,8 @@ function mapStateToProps(state){
   return {
       list,
       total,
-      page
+      page,
+      loading:state.loading.models.users
   }
 }
 export default connect(mapStateToProps)(Users);

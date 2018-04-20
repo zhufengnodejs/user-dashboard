@@ -1,20 +1,21 @@
 import * as userService from '../services/users';
+import qs from 'qs';
 export default {
     namespace:'users',
     state:{
         list:[],
         total:null,
-        page:null
+        page: null
     },
     reducers:{
-        save(state,{payload:{data:list,total,page}}){
+        save(state,{payload:{users:list,total,page}}){
               return {...state,list,total,page};  
         }
     },
     effects:{
         *query({payload:{page}},{call,put}){
-            const {data,headers} = yield call(userService.query,{page});
-            yield put({type:'save',payload:{data,total:parseInt(headers['x-total-count'],10),page:parseInt(1,10)}});
+            const data=yield call(userService.query,{page});
+            yield put({type:'save',payload:{...data,page:parseInt(page,10)}});
         },
         *remove({ payload: id }, { call, put, select }) {
             yield call(userService.remove, id);
@@ -29,9 +30,11 @@ export default {
     },
     subscriptions:{
         setup({dispatch,history}){
-            return history.listen(({pathname,query={page:1}})=>{
-                if(pathname == '/users'){
-                    dispatch({type:'query',payload:query});
+            return history.listen(function ({pathname,search}) {
+                console.log('listen',arguments);
+                if (pathname==='/users') {
+                    console.log(qs.parse(search.slice(1)));
+                    dispatch({type:'query',payload:qs.parse(search.slice(1))});
                 }
             });
         }

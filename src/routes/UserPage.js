@@ -1,8 +1,10 @@
 import Users from '../components/Users';
+import Header from '../components/Header';
 export default () => {
     return (
       <div>
-       <Users/>
+        <Header/>  
+        <Users/>
       </div>
     )
   }
